@@ -59,8 +59,5 @@ int main(){
     printf("\nPopped %d", pop(stack));
     printf("\nPopped %d", pop(stack));
     
-
-
-
     return 0;
 }

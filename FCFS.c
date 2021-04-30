@@ -30,10 +30,22 @@ void printQueue(Queue *q){
 
 }
 
+void printReverseQueue(Queue *q){
+    PCB *pn= q->tail;
+    printf("PID\t ProcessName\t CPUBurst\t ArrivalTime\t WaitingTime\t  NodeLocation\n");
+    while(pn!=0){
+        printf("%3d %8c  %15d    %15d    %15d     @%15d\n", 
+        pn->pid, pn->processName, pn->burstTime, pn->arrivalTime, pn->waitingTime, pn);
+        pn = pn->prev;
+    }
+
+}
+
+
 void insertProcess(Queue *q, int burst, int priority, char pName){
 
     PCB *newProcess = (PCB *)malloc(sizeof(PCB));
-    newProcess->next = newProcess->prev = 0; //Link Reset
+    newProcess->next = newProcess->prev = NULL; //Link Reset
     //set values
     newProcess->pid = PID++;
     newProcess->arrivalTime = CLOCK;
@@ -44,25 +56,35 @@ void insertProcess(Queue *q, int burst, int priority, char pName){
     newProcess->waitingTime=-1;
     newProcess->turnArTime=-1;
 
-    if(q->head==0){
+    if(burst == 20){
+        q->head->prev = newProcess;
+        newProcess->next = q->head;
+        q->head = newProcess;
+        return;
+
+
+    }
+
+    if(q->head==NULL){
         q->head= q->tail = newProcess;
+
     }
     else{
         q->tail->next = newProcess;
         newProcess->prev = q->tail;
         q->tail = newProcess;
     }
+    
 
 
 
 
 }
 
-
 PCB deQueue(Queue *list){
     PCB t;
     t.pid=0;
-    if(list->head == 0){
+    if(list->head == NULL){
         printf("\n Queue is Empty \n");
         return t;
     }
@@ -91,15 +113,18 @@ void executeProcess(Queue *rq){
 int main()
 {
     Queue *readyQ = (Queue *) malloc(sizeof(Queue));
-    readyQ->head = readyQ->tail = 0; 
+    readyQ->head = readyQ->tail = NULL; 
     insertProcess(readyQ, 10, P_NORMAL,'A');
     insertProcess(readyQ, 5, P_NORMAL, 'B');
     insertProcess(readyQ, 20, P_NORMAL, 'C');
 
     printQueue(readyQ);
+    printf("########################################\n");
+    printf("Reverse List\n");
+    printReverseQueue(readyQ);
     //deQueue(readyQ);
    // printQueue(readyQ);
-   executeProcess(readyQ);
-   printf("\nAverage Waiting time = %f",(float) (TotalWaitingTime/TotalProcessExecuted));
+   //executeProcess(readyQ);
+   //printf("\nAverage Waiting time = %f",(float) (TotalWaitingTime/TotalProcessExecuted));
     return 0;
 }
