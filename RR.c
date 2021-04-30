@@ -145,9 +145,9 @@ int main()
 {
     Queue *readyQ = (Queue *) malloc(sizeof(Queue));
     readyQ->head = readyQ->tail = 0;
-    insertProcess(readyQ, 10, P_NORMAL);
-    insertProcess(readyQ, 5, P_NORMAL);
-    insertProcess(readyQ, 20, P_NORMAL);
+    insertProcess(readyQ, 24, P_NORMAL);
+    insertProcess(readyQ, 3, P_NORMAL);
+    insertProcess(readyQ, 3, P_NORMAL);
 
     printQueue(readyQ);
     //deQueue(readyQ);
