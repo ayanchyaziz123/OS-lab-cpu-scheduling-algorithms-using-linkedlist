@@ -74,6 +74,7 @@ PCB deQueue(Queue *list){
 
 void re_addPCB(Queue *q, PCB r){
     PCB *p = (PCB *) malloc(sizeof(PCB));
+    p->pid = r.pid;
     p->priority = r.priority;
     p->burstTime = r.burstTime;
     p->arrivalTime = r.arrivalTime;
@@ -112,15 +113,18 @@ void executeProcessRR(Queue *rq){
     while(!rq->head == 0){// cpu execution
         PCB r = deQueue(rq);
         printf("\n\nProcess %d is being Processed",r.pid); 
-
-        if(r.lastSeen==-1){
+       
+       //waiting time calculation
+        if(r.lastSeen==-1){ //1st time in cpu
             waiting = CLOCK - r.arrivalTime;
         }
         else{
             waiting = CLOCK - r.lastSeen;
         }
-        r.waitingTime= waiting;
-        TotalWaitingTime+= waiting;
+        r.waitingTime = waiting;
+        TotalWaitingTime += waiting;
+
+        //update clock
         if(r.burstTime <= QUANTUM){
             CLOCK+=r.burstTime;
             TotalProcessExecuted++;
@@ -136,7 +140,6 @@ void executeProcessRR(Queue *rq){
         }
         printf("\n Waiting Time for process-%d is %d",r.pid, r.waitingTime);
         printf("\nAfter time slice completion, CLOCK->%d", CLOCK);
-        TotalProcessExecuted++;
 
     }
 }
@@ -145,9 +148,9 @@ int main()
 {
     Queue *readyQ = (Queue *) malloc(sizeof(Queue));
     readyQ->head = readyQ->tail = 0;
-    insertProcess(readyQ, 24, P_NORMAL);
-    insertProcess(readyQ, 3, P_NORMAL);
-    insertProcess(readyQ, 3, P_NORMAL);
+    insertProcess(readyQ, 10, P_NORMAL);
+    insertProcess(readyQ, 5, P_NORMAL);
+    insertProcess(readyQ, 8, P_NORMAL);
 
     printQueue(readyQ);
     //deQueue(readyQ);

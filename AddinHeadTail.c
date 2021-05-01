@@ -4,11 +4,11 @@
 typedef struct a{
     int id;
     struct a *prev, *next;
-}Node;
+}Node; 
 
 typedef struct{
     Node *head, *tail;
-}Store;
+}Store; 
 
 void addInHeadNode(Store *store, int id){
     Node *n = (Node *) malloc(sizeof(Node));
